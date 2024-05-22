@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Notes.NotePanel"
+             x:Name="Control"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Notes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid MouseLeftButtonUp="Grid_MouseLeftButtonUp" x:Name="grid1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="label1" Content="{Binding Title, ElementName=Control, FallbackValue='Заголовок'}" Grid.Row="1"/>
+        <Label Name="label2" Content="{Binding Body, ElementName=Control, FallbackValue='Текст'}" Grid.Row="2"/>
+        <Label Name="label3" Content="{Binding Date, ElementName=Control, FallbackValue='Дата'}" Grid.Row="3"/>
+    </Grid>
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Setter Property="Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="local:NotePanel.IsSelected" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+                <Trigger Property="local:NotePanel.IsSelected" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+</UserControl>

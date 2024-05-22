@@ -1,0 +1,34 @@
+﻿<Window x:Class="Notes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Notes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Column="0">
+        <ItemsControl ItemsSource="{Binding mycl}" Name="NotePanels">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Body="{Binding Body}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="40" Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBox x:Name="textbox1" Text="sdf" Grid.Row="0" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="textbox2" Text="sdf" Grid.Row="1" TextChanged="textbox2_TextChanged"/>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>
