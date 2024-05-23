@@ -4,31 +4,61 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notes"
+        xmlns:cv="clr-namespace:Notes.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="LightGray">
+    <Window.Resources>
+        <cv:FlowDocumentToStringConverter x:Key="FlowDocumentToStringConverter"/>
+    </Window.Resources>
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" MaxWidth="300"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Column="0">
-        <ItemsControl ItemsSource="{Binding mycl}" Name="NotePanels">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Body="{Binding Body}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition MinHeight="40" Height="Auto"/>
+                    <RowDefinition Height="auto" MinHeight="40"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBox x:Name="textbox1" Text="sdf" Grid.Row="0" TextChanged="TextBox_TextChanged"/>
-                <TextBox x:Name="textbox2" Text="sdf" Grid.Row="1" TextChanged="textbox2_TextChanged"/>
+                <Button Content="Новая заметка" Grid.Row="0" Click="Button_Click"/>
+                <ItemsControl ItemsSource="{Binding mycl}" Name="NotePanels" Grid.Row="1">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Body="{Binding Body, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </ScrollViewer>
+        <Grid Grid.Column="1" Background="#FFDDDDDD">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MinHeight="40" Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" LostFocus="textbox1_LostFocus"/>
+                    <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" LostFocus="textbox2_LostFocus_1"/>
+                </Grid>
+            </ScrollViewer>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Ж" Grid.Column="0" FontWeight="Bold" MinWidth="40" Click="Button_Click_1" Focusable="False"/>
+                <Button Content="К" Grid.Column="1" FontStyle="Italic" MinWidth="40" Click="Button_Click_2" Focusable="False"/>
+                <Button Content="Удалить заметку" MinWidth="120"  Grid.Column="4" Click="Button_Click_3" Focusable="False"/>
+            </Grid>
+        </Grid>
+        
     </Grid>
 </Window>

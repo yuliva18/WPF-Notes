@@ -15,16 +15,20 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Name="label1" Content="{Binding Title, ElementName=Control, FallbackValue='Заголовок'}" Grid.Row="1"/>
-        <Label Name="label2" Content="{Binding Body, ElementName=Control, FallbackValue='Текст'}" Grid.Row="2"/>
-        <Label Name="label3" Content="{Binding Date, ElementName=Control, FallbackValue='Дата'}" Grid.Row="3"/>
+        <Label Name="label1" Grid.Row="1">
+            <TextBlock Text="{Binding Title, ElementName=Control, FallbackValue='Заголовок'}" TextTrimming="CharacterEllipsis" FontSize="14" FontWeight="DemiBold"/>
+        </Label>
+        <Label Name="label2"  Grid.Row="2">
+            <TextBlock Text="{Binding Body, ElementName=Control, FallbackValue='Текст'}" TextTrimming="CharacterEllipsis"/>
+        </Label>
+        <Label Name="label3" Content="{Binding Date, ElementName=Control, FallbackValue='Дата'}" Grid.Row="3" Foreground="#FF7B7B7B"/>
     </Grid>
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}">
             <Setter Property="Background" Value="White"/>
             <Style.Triggers>
                 <Trigger Property="local:NotePanel.IsSelected" Value="True">
-                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Background" Value="#FFE6E6E6"/>
                 </Trigger>
                 <Trigger Property="local:NotePanel.IsSelected" Value="False">
                     <Setter Property="Background" Value="White"/>

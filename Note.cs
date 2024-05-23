@@ -5,24 +5,25 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace Notes
 {
     public class Note : INotifyPropertyChanged
     {
-        private int _id;
-        public int Id
+        private Int64 _id;
+        public Int64 Id
         {
             get => _id;
             set { _id = value; NotifyPropertyChanged(); }
         }
-        private string _title;
-        public String Title {
+        private FlowDocument _title;
+        public FlowDocument Title {
             get => _title;
             set { _title = value; NotifyPropertyChanged(); } 
         }
-        private string _body;
-        public String Body
+        private FlowDocument _body;
+        public FlowDocument Body
         {
             get => _body;
             set { _body = value; NotifyPropertyChanged(); }
@@ -40,7 +41,7 @@ namespace Notes
             set { _isSelected = value; NotifyPropertyChanged(); }
         }
 
-        public Note(int id, string title, string body, string date, bool isSelected = false) {
+        public Note(Int64 id, FlowDocument title, FlowDocument body, string date, bool isSelected = false) {
             Id = id;
             Title = title;
             Body = body;
@@ -56,5 +57,14 @@ namespace Notes
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+
+    public class NoteIdEqualityComparer : IEqualityComparer<Note>
+    {
+        public bool Equals(Note x, Note y)
+        {
+            return x.Id == y.Id;
+        }
+        public int GetHashCode(Note obj) { return obj.Id.GetHashCode(); }
     }
 }

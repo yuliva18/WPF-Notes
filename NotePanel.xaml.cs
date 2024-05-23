@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -21,20 +22,20 @@ namespace Notes
     /// <summary>
     /// Логика взаимодействия для NotePanel.xaml
     /// </summary>
-    public partial class NotePanel : UserControl//, INotifyPropertyChanged
+    public partial class NotePanel : UserControl
     {
-        public static DependencyProperty IdProperty = DependencyProperty.Register("Id", typeof(int), typeof(NotePanel));
-        public static DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(NotePanel)/*, new PropertyMetadata(a)*/);
+        public static readonly DependencyProperty IdProperty = DependencyProperty.Register("Id", typeof(Int64), typeof(NotePanel));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(NotePanel));
         public static readonly DependencyProperty BodyProperty = DependencyProperty.Register("Body", typeof(string), typeof(NotePanel));
         public static readonly DependencyProperty DateProperty = DependencyProperty.Register("Date", typeof(string), typeof(NotePanel));
-        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(NotePanel)/*, new PropertyMetadata(a)*/);
+        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(NotePanel));
         public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("MouseLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NotePanel));
 
         public bool IsSelected { 
             get => (bool)GetValue(IsSelectedProperty); 
             set { SetValue(IsSelectedProperty, value); } 
         }
-        public int Id { get => (int)GetValue(IdProperty); set { SetValue(IdProperty, value); } }
+        public Int64 Id { get => (Int64)GetValue(IdProperty); set { SetValue(IdProperty, value); } }
         public String Title { get => (string)GetValue(TitleProperty); set { SetValue(TitleProperty, value); } }
         public String Body { get => (string)GetValue(BodyProperty); set { SetValue(BodyProperty, value); } }
         public String Date { get => (string)GetValue(DateProperty); set { SetValue(DateProperty, value); } }
@@ -43,19 +44,12 @@ namespace Notes
             remove { RemoveHandler(ClickEvent, value); }
         }
 
-        
-
-        public static void a(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //    //NotePanel b = (NotePanel)d;
-            //    //PropertyChangedEventHandler h = b.PropertyChanged;
-            //    //if (h != null)
-            //    //{
-            //    //    h(b, new PropertyChangedEventArgs(true.ToString()));
-            //    //}
-            var val = e.NewValue;
-        }
-
+        //public static void TitlePropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        //{
+        //    NotePanel notePanel = (NotePanel)sender;
+        //    var s = e.NewValue as string;
+        //    notePanel.Title = s.Split("\r\n")[0];
+        //}
 
         public NotePanel()
          {
@@ -66,13 +60,6 @@ namespace Notes
         {
             RoutedEventArgs eventArgs = new RoutedEventArgs(NotePanel.ClickEvent);
             RaiseEvent(eventArgs);
-            //PropertyChangedEventHandler h = PropertyChanged;
-            //if (h != null)
-            //{
-            //    h(this, new PropertyChangedEventArgs("IsSelected"));
-            //}
-            // a(this, new DependencyPropertyChangedEventArgs(IsSelectedProperty, false, true));
-            
         }
     }
 }
