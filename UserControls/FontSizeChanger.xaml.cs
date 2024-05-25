@@ -67,7 +67,8 @@ namespace Notes.UserControls
 
         private static void SetSizePT(TextRange tr, double size)
         {
-            tr.ApplyPropertyValue(FontSizeProperty, ((int)(size / 0.75)).ToString());
+            var px = (int)(size / 0.75);
+            SetSizePX(tr, px);
         }
 
         private static double GetSizePX(TextRange tr)
@@ -77,7 +78,7 @@ namespace Notes.UserControls
 
         private static void SetSizePX(TextRange tr, double size)
         {
-            tr.ApplyPropertyValue(FontSizeProperty, Math.Max(size, 1).ToString());
+            tr.ApplyPropertyValue(FontSizeProperty, Math.Min(Math.Max(size, 1), 2000).ToString());
         }
 
         private static void RangeChangedCallback (DependencyObject sender, DependencyPropertyChangedEventArgs e)
@@ -89,40 +90,60 @@ namespace Notes.UserControls
 
         private void Button_UP_Click(object sender, RoutedEventArgs e)
         {
-            int len = Range.Text.Length;
-            TextPointer start = Range.Start;
-            TextPointer end;
-            TextRange tr;
-            while (len > 0 && start.GetNextInsertionPosition(LogicalDirection.Forward) != null)
+            try
             {
-                end = start.GetNextInsertionPosition(LogicalDirection.Forward);
-                tr = new TextRange(start, end);
-                double size = GetSizePX(tr);
+                double size = GetSizePX(Range);
                 size = getNextSize(size);
-                SetSizePX(tr, size);
-                start = end;
-                len--;
+                SetSizePX(Range, size);
+                ShowActualSize();
             }
-            ShowActualSize();
+            catch
+            {
+                int len = Range.Text.Length;
+                TextPointer start = Range.Start;
+                TextPointer end;
+                TextRange tr;
+                while (len > 0 && start.GetNextContextPosition(LogicalDirection.Forward) != null)
+                {
+                    end = start.GetNextContextPosition(LogicalDirection.Forward);
+                    tr = new TextRange(start, end);
+                    double size = GetSizePX(tr);
+                    size = getNextSize(size);
+                    SetSizePX(tr, size);
+                    start = end;
+                    len--;
+                }
+                ShowActualSize();
+            }
         }
 
         private void Button_DOWN_Click(object sender, RoutedEventArgs e)
         {
-            int len = Range.Text.Length;
-            TextPointer start = Range.Start;
-            TextPointer end;
-            TextRange tr;
-            while (len > 0 && start.GetNextInsertionPosition(LogicalDirection.Forward) != null)
+            try
             {
-                end = start.GetNextInsertionPosition(LogicalDirection.Forward);
-                tr = new TextRange(start, end);
-                double size = GetSizePX(tr);
+                double size = GetSizePX(Range);
                 size = getPreviousSize(size);
-                SetSizePX(tr, size);
-                start = end;
-                len--;
+                SetSizePX(Range, size);
+                ShowActualSize();
             }
-            ShowActualSize();
+            catch
+            {
+                int len = Range.Text.Length;
+                TextPointer start = Range.Start;
+                TextPointer end;
+                TextRange tr;
+                while (len > 0 && start.GetNextContextPosition(LogicalDirection.Forward) != null)
+                {
+                    end = start.GetNextContextPosition(LogicalDirection.Forward);
+                    tr = new TextRange(start, end);
+                    double size = GetSizePX(tr);
+                    size = getPreviousSize(size);
+                    SetSizePX(tr, size);
+                    start = end;
+                    len--;
+                }
+                ShowActualSize();
+            }
         }
 
         private void combobox1_TextChanged(object sender, TextChangedEventArgs e)
@@ -148,7 +169,7 @@ namespace Notes.UserControls
             double i = SizeCollection.FirstOrDefault(x => x > val);
             if (i == 0) i = (val / 10) * 10 + 10;
             else if (val < SizeCollection[0]) i = val + 1;
-            return (int)Math.Round(i / 0.75);
+            return (int)Math.Round(Math.Max(i / 0.75, val1 + 1));
         }
 
         private int getPreviousSize(double val1)
@@ -157,7 +178,7 @@ namespace Notes.UserControls
             double i = SizeCollection.LastOrDefault(x => x < val);
             if (i == 0) i = Math.Max(val - 1, 1);
             else if (val > SizeCollection[SizeCollection.Count - 1]) i = Math.Max(SizeCollection[SizeCollection.Count - 1], val - 10);
-            return (int)Math.Round(i / 0.75);
+            return (int)Math.Round(Math.Min(i / 0.75, val1 - 1));
         }
     }
 }
