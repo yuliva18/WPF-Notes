@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\Динозаврик Рырь\Desktop\Notes\App.xaml
-21786257027
+41115684444
 
-11-425089947
+131379361578
 202-1941888855
-MainWindow.xaml;NotePanel.xaml;
+MainWindow.xaml;UserControls\FontSizeChanger.xaml;UserControls\NotePanel.xaml;UserControls\NumericUpDown.xaml;
 
 True
 

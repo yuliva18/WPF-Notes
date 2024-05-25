@@ -7,7 +7,13 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="NotePanel.xaml.cs">
+    <Compile Update="UserControls\FontSizeChanger.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\NotePanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\NumericUpDown.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -15,7 +21,13 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="NotePanel.xaml">
+    <Page Update="UserControls\FontSizeChanger.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\NotePanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\NumericUpDown.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

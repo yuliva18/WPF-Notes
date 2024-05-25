@@ -93,7 +93,7 @@ namespace Notes {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Notes;V1.0.0.0;component/notepanel.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Notes;component/notepanel.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\NotePanel.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

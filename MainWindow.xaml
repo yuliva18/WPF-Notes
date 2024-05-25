@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notes"
         xmlns:cv="clr-namespace:Notes.Converters"
+        xmlns:uc="clr-namespace:Notes.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Notes" Height="450" Width="800">
     <Window.Resources>
         <cv:FlowDocumentToStringConverter x:Key="FlowDocumentToStringConverter"/>
+        <cv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid TextBlock.FontSize="10pt">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MaxWidth="300"/>
             <ColumnDefinition Width="3*"/>
@@ -25,7 +27,7 @@
                 <ItemsControl ItemsSource="{Binding mycl}" Name="NotePanels" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Body="{Binding Body, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
+                            <uc:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Body="{Binding Body, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -42,8 +44,8 @@
                         <RowDefinition MinHeight="40" Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" LostFocus="textbox1_LostFocus"/>
-                    <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" LostFocus="textbox2_LostFocus_1"/>
+                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" SelectionChanged="textbox1_SelectionChanged" LostFocus="textbox1_LostFocus"/>
+                    <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" SelectionChanged="textbox2_SelectionChanged" />
                 </Grid>
             </ScrollViewer>
             <Grid Grid.Row="0">
@@ -51,12 +53,16 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Ж" Grid.Column="0" FontWeight="Bold" MinWidth="40" Click="Button_Click_1" Focusable="False"/>
-                <Button Content="К" Grid.Column="1" FontStyle="Italic" MinWidth="40" Click="Button_Click_2" Focusable="False"/>
-                <Button Content="Удалить заметку" MinWidth="120"  Grid.Column="4" Click="Button_Click_3" Focusable="False"/>
+                <Button Grid.Column="0" Content="Ж" FontWeight="Bold" Height="24" Width="24" Margin="5,0" Click="Button_Click_1" Focusable="False" />
+                <Button Grid.Column="1" Content="К" FontStyle="Italic" Height="24" Width="24" Margin="0,0,5,0" Click="Button_Click_2" Focusable="False"/>
+                <Label Grid.Column="2" Content="Размер шрифта: " VerticalAlignment="Center"/>
+                <!--<uc:NumericUpDown Grid.Column="3" MinValue="6" MaxValue="72" Value="12" MinWidth="70" Height="24" ValueChanged="NumericUpDown_ValueChanged" Focusable="False"/>-->
+                <uc:FontSizeChanger Grid.Column="3" Range="{Binding SelectedText, Mode=TwoWay}" MinWidth="150" Height="24"/>
+                <Button Grid.Column="5" Content="Удалить заметку" MinWidth="120"  Click="Button_Click_3" Focusable="False"/>
             </Grid>
         </Grid>
         

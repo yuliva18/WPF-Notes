@@ -11,22 +11,26 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using Notes.UserControls;
+using System.Configuration;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Notes
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public ObservableCollection<Note> mycl { get; set; } = new ObservableCollection<Note>();
+        private TextRange _selectedText;
+        public TextRange SelectedText {
+            get => _selectedText;
+            set { _selectedText = value; NotifyPropertyChanged(); }
+        }
         NoteIdEqualityComparer noteIdEqualityComparer = new NoteIdEqualityComparer();
         Db db;
-
-        public bool IsCollectionEmpty
-        {
-            get => mycl.Count == 0;
-        }
 
         public MainWindow()
         {
@@ -102,6 +106,7 @@ namespace Notes
         {
             TextRange tr = richTextBox.Selection;
             TextPointer end = tr.Start.GetNextContextPosition(LogicalDirection.Forward);
+            if (end == null) { return; }
             tr = new TextRange(tr.Start, end);
             if ((FontWeight)tr.GetPropertyValue(FontWeightProperty) == FontWeights.Bold)
             {
@@ -117,6 +122,7 @@ namespace Notes
         {
             TextRange tr = richTextBox.Selection;
             TextPointer end = tr.Start.GetNextContextPosition(LogicalDirection.Forward);
+            if (end == null) { return; }
             tr = new TextRange(tr.Start, end);
             if ((FontStyle)tr.GetPropertyValue(FontStyleProperty) == FontStyles.Italic)
             {
@@ -126,6 +132,11 @@ namespace Notes
             {
                 richTextBox.Selection.ApplyPropertyValue(FontStyleProperty, FontStyles.Italic);
             }
+        }
+
+        private void SetFontSize(RichTextBox richTextBox, int value)
+        {
+            richTextBox.Selection.ApplyPropertyValue(FontSizeProperty, value.ToString());
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -158,14 +169,36 @@ namespace Notes
             }
         }
 
-        private void textbox1_LostFocus(object sender, RoutedEventArgs e)
+        private void NumericUpDown_ValueChanged(object sender, RoutedEventArgs e)
         {
-            textbox1.Selection.Select(textbox1.Document.ContentStart, textbox1.Document.ContentStart);
+            NumericUpDown numUD = (NumericUpDown)sender;
+            int val = numUD.Value;
+            SetFontSize(textbox1, val);
+            SetFontSize(textbox2, val);
         }
 
-        private void textbox2_LostFocus_1(object sender, RoutedEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            textbox2.Selection.Select(textbox2.Document.ContentStart, textbox2.Document.ContentStart);
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void textbox1_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            SelectedText = new TextRange(textbox1.Selection.Start, textbox1.Selection.End);
+        }
+
+        private void textbox2_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            SelectedText = new TextRange(textbox2.Selection.Start, textbox2.Selection.End);
+        }
+
+        private void textbox1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

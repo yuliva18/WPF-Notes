@@ -80,8 +80,8 @@ namespace Notes
         {
             FlowDocument titleFD = (FlowDocument)converter.ConvertBack(title, typeof(FlowDocument), null, CultureInfo.CurrentCulture);
             FlowDocument bodyFD = (FlowDocument)converter.ConvertBack(body, typeof(FlowDocument), null, CultureInfo.CurrentCulture);
-            titleFD.FontSize = 16;
-            bodyFD.FontSize = 14;
+            titleFD.FontSize = 16 / 0.75;
+            bodyFD.FontSize = 14 / 0.75;
             string sql1 = String.Format("INSERT INTO Note(Title, Body) VALUES ('{0}', '{1}');", FDToRtf(titleFD), FDToRtf(bodyFD));
             return new SqliteCommand(sql1, connection).ExecuteNonQuery();
         }
