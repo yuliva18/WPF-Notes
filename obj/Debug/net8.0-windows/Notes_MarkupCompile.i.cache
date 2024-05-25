@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\phant\Desktop\Notes\App.xaml
-21786257027
+41115684444
 
-92098985977
+131804237701
 202-131527161
-MainWindow.xaml;NotePanel.xaml;
+MainWindow.xaml;UserControls\FontSizeChanger.xaml;UserControls\NotePanel.xaml;UserControls\NumericUpDown.xaml;
 
-False
+True
 

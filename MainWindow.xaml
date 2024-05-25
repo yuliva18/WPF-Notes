@@ -24,7 +24,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button Content="Новая заметка" Grid.Row="0" Click="Button_Click"/>
-                <ItemsControl ItemsSource="{Binding mycl}" Name="NotePanels" Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding NoteCollection}" Name="NotePanels" Grid.Row="1">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <uc:NotePanel Height="100" Grid.Column="0" Title="{Binding Title, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Body="{Binding Body, Mode=TwoWay, Converter = {StaticResource FlowDocumentToStringConverter}}" Date="{Binding Date}" IsSelected="{Binding IsSelected}" Click="onCl" Id="{Binding Id}"/>
@@ -44,8 +44,8 @@
                         <RowDefinition MinHeight="40" Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" SelectionChanged="textbox1_SelectionChanged"/>
-                    <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" SelectionChanged="textbox2_SelectionChanged" />
+                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" SelectionChanged="textbox1_SelectionChanged" Visibility="{Binding IsCollectionNonEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" SelectionChanged="textbox2_SelectionChanged" Visibility="{Binding IsCollectionNonEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
             </ScrollViewer>
             <Grid Grid.Row="0">
@@ -61,7 +61,7 @@
                 <Button Grid.Column="1" Content="К" FontStyle="Italic" Height="24" Width="24" Margin="0,0,5,0" Click="Button_Click_2" Focusable="False"/>
                 <Label Grid.Column="2" Content="Размер шрифта: " VerticalAlignment="Center"/>
                 <uc:FontSizeChanger Grid.Column="3" Range="{Binding SelectedText, Mode=TwoWay}" MinWidth="150" Height="24"/>
-                <Button Grid.Column="5" Content="Удалить заметку" MinWidth="120"  Click="Button_Click_3" Focusable="False"/>
+                <Button Grid.Column="5" Content="Удалить заметку" MinWidth="120"  Click="DelNote" Focusable="False"/>
             </Grid>
         </Grid>
         

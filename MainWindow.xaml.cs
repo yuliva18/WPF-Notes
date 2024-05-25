@@ -25,11 +25,15 @@ namespace Notes
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public ObservableCollection<Note> mycl { get; set; } = new ObservableCollection<Note>();
+        public ObservableCollection<Note> NoteCollection { get; set; } = new ObservableCollection<Note>();
         private TextRange _selectedText;
         public TextRange SelectedText {
             get => _selectedText;
             set { _selectedText = value; NotifyPropertyChanged(); }
+        }
+        public bool IsCollectionNonEmpty
+        {
+            get => NoteCollection.Count > 0;
         }
         NoteIdEqualityComparer noteIdEqualityComparer = new NoteIdEqualityComparer();
         Db db;
@@ -41,20 +45,20 @@ namespace Notes
 
             db = new Db();
             db.CreateTableIfNotExist();
-            mycl = db.SelectAll();
+            NoteCollection = db.SelectAll();
             SelectFisrt();
             ChangeNote();
         }
 
         public void onCl(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < mycl.Count; i++)
+            for (int i = 0; i < NoteCollection.Count; i++)
             {
-                mycl[i].IsSelected = false;
+                NoteCollection[i].IsSelected = false;
             }
             var n = sender as NotePanel;
             var id = n.Id;
-            var a = mycl.First(x => x.Id == id);
+            var a = NoteCollection.First(x => x.Id == id);
             a.IsSelected = true;
             ChangeNote();
         }
@@ -62,20 +66,20 @@ namespace Notes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             RichTextBox? textBox = sender as RichTextBox;
-            Note? note = mycl.FirstOrDefault(x => x.IsSelected == true);
+            Note? note = NoteCollection.FirstOrDefault(x => x.IsSelected == true);
             if (note != null && textBox != null) { note.Title = textBox.Document; db.UpdateNote(note); }
         }
 
         private void textbox2_TextChanged(object sender, TextChangedEventArgs e)
         {
             RichTextBox? textBox = sender as RichTextBox;
-            Note? note = mycl.FirstOrDefault(x => x.IsSelected == true);
+            Note? note = NoteCollection.FirstOrDefault(x => x.IsSelected == true);
             if (note != null && textBox != null) { note.Body = textBox.Document; db.UpdateNote(note); }
         }
 
         private void ChangeNote()
         {
-            Note? note = mycl.FirstOrDefault(x => x.IsSelected == true);
+            Note? note = NoteCollection.FirstOrDefault(x => x.IsSelected == true);
             if (note != null)
             {
                 textbox1.Document = note.Title;
@@ -87,20 +91,21 @@ namespace Notes
         {
             db.InsertNote();
             ObservableCollection<Note> tmp = db.SelectAll();
-            Note[] d = tmp.Except(mycl, noteIdEqualityComparer).ToArray();
+            Note[] d = tmp.Except(NoteCollection, noteIdEqualityComparer).ToArray();
             if (d != null)
             {
-                for (int i = 0; i < d.Count(); i++) mycl.Add(d[i]);
+                for (int i = 0; i < d.Count(); i++) NoteCollection.Add(d[i]);
             }
+            NotifyPropertyChanged("IsCollectionNonEmpty");
         }
 
         private void SelectFisrt()
         {
-            for (int i = 0; i < mycl.Count; i++)
+            for (int i = 0; i < NoteCollection.Count; i++)
             {
-                mycl[i].IsSelected = false;
+                NoteCollection[i].IsSelected = false;
             }
-            if (mycl.Count > 0) mycl[0].IsSelected = true;
+            if (NoteCollection.Count > 0) NoteCollection[0].IsSelected = true;
             ChangeNote();
         }
 
@@ -159,16 +164,17 @@ namespace Notes
             SetItalic(textbox2);
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void DelNote(object sender, RoutedEventArgs e)
         {
-            Note? note = mycl.FirstOrDefault(x => x.IsSelected == true);
+            Note? note = NoteCollection.FirstOrDefault(x => x.IsSelected == true);
             if (note != null)
             {
                 db.DeleteNote(note);
-                mycl.Remove(note);
-                if (mycl.Count == 0) { AddNote(); }
+                NoteCollection.Remove(note);
+                //if (NoteCollection.Count == 0) { AddNote(); } //Автоматическое создание заметки если все удалены
                 SelectFisrt();
             }
+            NotifyPropertyChanged("IsCollectionNonEmpty");
         }
 
         private void NumericUpDown_ValueChanged(object sender, RoutedEventArgs e)
