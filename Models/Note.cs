@@ -7,20 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
-namespace Notes
+namespace Notes.Models
 {
     public class Note : INotifyPropertyChanged
     {
-        private Int64 _id;
-        public Int64 Id
+        private long _id;
+        public long Id
         {
             get => _id;
             set { _id = value; NotifyPropertyChanged(); }
         }
         private FlowDocument _title;
-        public FlowDocument Title {
+        public FlowDocument Title
+        {
             get => _title;
-            set { _title = value; NotifyPropertyChanged(); } 
+            set { _title = value; NotifyPropertyChanged(); }
         }
         private FlowDocument _body;
         public FlowDocument Body
@@ -29,7 +30,7 @@ namespace Notes
             set { _body = value; NotifyPropertyChanged(); }
         }
         private string _date;
-        public String Date
+        public string Date
         {
             get => _date;
             set { _date = value; NotifyPropertyChanged(); }
@@ -41,7 +42,8 @@ namespace Notes
             set { _isSelected = value; NotifyPropertyChanged(); }
         }
 
-        public Note(Int64 id, FlowDocument title, FlowDocument body, string date, bool isSelected = false) {
+        public Note(long id, FlowDocument title, FlowDocument body, string date, bool isSelected = false)
+        {
             Id = id;
             Title = title;
             Body = body;
@@ -50,7 +52,7 @@ namespace Notes
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {

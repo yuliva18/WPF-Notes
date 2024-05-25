@@ -15,6 +15,8 @@ using Notes.UserControls;
 using System.Configuration;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Notes.Models;
+using Notes.DataBase;
 
 namespace Notes
 {
@@ -194,11 +196,6 @@ namespace Notes
         private void textbox2_SelectionChanged(object sender, RoutedEventArgs e)
         {
             SelectedText = new TextRange(textbox2.Selection.Start, textbox2.Selection.End);
-        }
-
-        private void textbox1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
         }
     }
 }

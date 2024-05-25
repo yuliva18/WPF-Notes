@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Notes.Converters;
+using Notes.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,13 +15,14 @@ using System.Windows;
 using System.Windows.Documents;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Notes
+namespace Notes.DataBase
 {
     internal class Db
     {
         FlowDocumentToStringConverter converter = new FlowDocumentToStringConverter();
         SqliteConnection connection;
-        public Db() {
+        public Db()
+        {
             string connectionString = "Data Source=notes.db";
             connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -41,7 +43,7 @@ namespace Notes
             {
                 while (reader.Read())
                 {
-                    Int64 id = (Int64)reader.GetValue(0);
+                    long id = (long)reader.GetValue(0);
                     FlowDocument? title = RtfToFD(reader.GetString(1));
                     FlowDocument? body = RtfToFD(reader.GetString(2));
                     string date = reader.GetString(3);
@@ -56,7 +58,7 @@ namespace Notes
             }
         }
 
-        private String FDToRtf(FlowDocument document)
+        private string FDToRtf(FlowDocument document)
         {
             TextRange docrange = new TextRange(document.ContentStart, document.ContentEnd);
             MemoryStream stream = new MemoryStream();
@@ -66,7 +68,7 @@ namespace Notes
             return reader.ReadToEnd();
         }
 
-        private FlowDocument RtfToFD(String s)
+        private FlowDocument RtfToFD(string s)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(s);
             MemoryStream stream = new MemoryStream(bytes);
@@ -76,13 +78,13 @@ namespace Notes
             return res;
         }
 
-        public int InsertNote(String title = "Новая заметка", String body = "Напишите здесь что-нибудь!")
+        public int InsertNote(string title = "Новая заметка", string body = "Напишите здесь что-нибудь!")
         {
             FlowDocument titleFD = (FlowDocument)converter.ConvertBack(title, typeof(FlowDocument), null, CultureInfo.CurrentCulture);
             FlowDocument bodyFD = (FlowDocument)converter.ConvertBack(body, typeof(FlowDocument), null, CultureInfo.CurrentCulture);
             titleFD.FontSize = 16 / 0.75;
             bodyFD.FontSize = 14 / 0.75;
-            string sql1 = String.Format("INSERT INTO Note(Title, Body) VALUES ('{0}', '{1}');", FDToRtf(titleFD), FDToRtf(bodyFD));
+            string sql1 = string.Format("INSERT INTO Note(Title, Body) VALUES ('{0}', '{1}');", FDToRtf(titleFD), FDToRtf(bodyFD));
             return new SqliteCommand(sql1, connection).ExecuteNonQuery();
         }
 
@@ -90,13 +92,13 @@ namespace Notes
         {
             FlowDocument title = note.Title;
             FlowDocument body = note.Body;
-            string sql = String.Format("UPDATE Note SET Title = '{0}', Body = '{1}' WHERE Id = {2}", FDToRtf(title), FDToRtf(body), note.Id);
+            string sql = string.Format("UPDATE Note SET Title = '{0}', Body = '{1}' WHERE Id = {2}", FDToRtf(title), FDToRtf(body), note.Id);
             return new SqliteCommand(sql, connection).ExecuteNonQuery();
         }
 
         public int DeleteNote(Note note)
         {
-            string sql = String.Format("DELETE FROM Note WHERE Id = {0}", note.Id);
+            string sql = string.Format("DELETE FROM Note WHERE Id = {0}", note.Id);
             return new SqliteCommand(sql, connection).ExecuteNonQuery();
         }
     }

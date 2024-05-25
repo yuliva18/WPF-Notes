@@ -44,7 +44,7 @@
                         <RowDefinition MinHeight="40" Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" SelectionChanged="textbox1_SelectionChanged" LostFocus="textbox1_LostFocus"/>
+                    <RichTextBox x:Name="textbox1" Grid.Row="0" TextChanged="TextBox_TextChanged" AcceptsReturn="True" SelectionChanged="textbox1_SelectionChanged"/>
                     <RichTextBox x:Name="textbox2" Grid.Row="1" TextChanged="textbox2_TextChanged" AcceptsReturn="True" SelectionChanged="textbox2_SelectionChanged" />
                 </Grid>
             </ScrollViewer>
@@ -60,7 +60,6 @@
                 <Button Grid.Column="0" Content="Ж" FontWeight="Bold" Height="24" Width="24" Margin="5,0" Click="Button_Click_1" Focusable="False" />
                 <Button Grid.Column="1" Content="К" FontStyle="Italic" Height="24" Width="24" Margin="0,0,5,0" Click="Button_Click_2" Focusable="False"/>
                 <Label Grid.Column="2" Content="Размер шрифта: " VerticalAlignment="Center"/>
-                <!--<uc:NumericUpDown Grid.Column="3" MinValue="6" MaxValue="72" Value="12" MinWidth="70" Height="24" ValueChanged="NumericUpDown_ValueChanged" Focusable="False"/>-->
                 <uc:FontSizeChanger Grid.Column="3" Range="{Binding SelectedText, Mode=TwoWay}" MinWidth="150" Height="24"/>
                 <Button Grid.Column="5" Content="Удалить заметку" MinWidth="120"  Click="Button_Click_3" Focusable="False"/>
             </Grid>
